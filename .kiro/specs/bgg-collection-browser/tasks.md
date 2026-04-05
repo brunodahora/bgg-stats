@@ -112,20 +112,20 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - `enabled: !!username`, `staleTime: 5 * 60 * 1000`, `retry: 2`, `retryDelay: (attempt) => attempt * 1000`
     - _Requirements: 1.2, 1.4, 1.5, 1.6_
 
-- [ ] 8. localStorage persistence hook
-  - [ ] 8.1 Create `lib/use-persisted-username.ts` implementing `usePersistedUsername()`
+- [x] 8. localStorage persistence hook
+  - [x] 8.1 Create `lib/use-persisted-username.ts` implementing `usePersistedUsername()`
     - Read from `localStorage` in `useEffect` (post-hydration) and set `savedUsername` state
     - `save(username)`: trim, reject empty/whitespace (return `false`), write to `localStorage` key `"bgg-stats:username"`, update state, return `true`
     - `clear()`: remove from `localStorage`, set state to `null`
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7_
 
-  - [ ] 8.2 Write unit tests for `usePersistedUsername` in `lib/use-persisted-username.test.ts`
+  - [x] 8.2 Write unit tests for `usePersistedUsername` in `lib/use-persisted-username.test.ts`
     - Mock `localStorage` via `vi.stubGlobal` or jsdom's built-in implementation
     - Test save with valid username, save with whitespace-only input, clear after save
     - Use Gherkin notation
     - _Requirements: 12.2, 12.3, 12.6_
 
-  - [ ] 8.3 Write property tests under `describe("properties", ...)` in the same file
+  - [x] 8.3 Write property tests under `describe("properties", ...)` in the same file
     - **Property 16: localStorage Save and Reject** — any non-empty non-whitespace string is persisted; any whitespace-only string is rejected and returns `false`
     - **Property 17: localStorage Clear Round-Trip** — after `save` then `clear`, `localStorage.getItem(STORAGE_KEY)` returns `null`
     - **Validates: Requirements 12.2, 12.3, 12.6**
