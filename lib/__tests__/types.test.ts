@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getWeightCategory } from "./types";
+import { getWeightCategory } from "../types";
 
 describe("getWeightCategory", () => {
   describe("null (unrated)", () => {

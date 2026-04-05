@@ -108,9 +108,10 @@ describe("CollectionBrowser", () => {
 
 ## File Conventions
 
-- Test files live next to the code they test: `foo.ts` → `foo.test.ts`
-- Integration tests for pages/components: `components/game-card.test.tsx`
-- Unit tests for utilities: `lib/filter-games.test.ts`
+- Test files live in a `__tests__` folder co-located with the code they test:
+  - `lib/filter-games.ts` → `lib/__tests__/filter-games.test.ts`
+  - `app/api/bgg/collection/route.ts` → `app/api/bgg/collection/__tests__/route.test.ts`
+  - `components/game-card.tsx` → `components/__tests__/game-card.test.tsx`
 - Property-based tests: co-located in the same test file, in a `describe("properties", ...)` block
 - MSW handlers: `tests/msw/handlers.ts` (shared across integration tests)
 

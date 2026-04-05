@@ -1,0 +1,54 @@
+import { type NextRequest } from "next/server";
+
+const BGG_BASE = "https://boardgamegeek.com/xmlapi2";
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 2000;
+
+export async function GET(request: NextRequest) {
+  const username = request.nextUrl.searchParams.get("username")?.trim();
+
+  if (!username) {
+    return new Response(JSON.stringify({ error: "username is required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const url = `${BGG_BASE}/collection?username=${encodeURIComponent(username)}&stats=1&own=1`;
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    const res = await fetch(url, { cache: "no-store" });
+
+    if (res.status === 202) {
+      if (attempt < MAX_RETRIES) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
+        continue;
+      }
+      return new Response(
+        JSON.stringify({
+          error: "BGG is still processing the request. Please try again.",
+        }),
+        { status: 503, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    if (!res.ok) {
+      return new Response(
+        JSON.stringify({ error: `BGG API returned ${res.status}` }),
+        { status: res.status, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    const xml = await res.text();
+    return new Response(xml, {
+      status: 200,
+      headers: { "Content-Type": "application/xml" },
+    });
+  }
+
+  // Unreachable — loop always returns, but satisfies TypeScript
+  return new Response(JSON.stringify({ error: "Unexpected error" }), {
+    status: 500,
+    headers: { "Content-Type": "application/json" },
+  });
+}

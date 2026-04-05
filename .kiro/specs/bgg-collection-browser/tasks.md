@@ -25,8 +25,8 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Use Gherkin notation for all test descriptions
     - _Requirements: 5.2, 5.3_
 
-- [ ] 3. BGG API proxy route handler
-  - [ ] 3.1 Create `app/api/bgg/collection/route.ts` implementing the `GET` handler
+- [x] 3. BGG API proxy route handler
+  - [x] 3.1 Create `app/api/bgg/collection/route.ts` implementing the `GET` handler
     - Forward requests to `https://boardgamegeek.com/xmlapi2/collection?username={username}&stats=1&own=1` with `cache: "no-store"`
     - Retry up to 3 times with 2-second delay on HTTP 202
     - Return raw XML with `Content-Type: application/xml` on success
@@ -35,14 +35,14 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Pass through non-200/non-202 status codes as JSON errors
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
 
-  - [ ] 3.2 Write property tests for the route handler in `app/api/bgg/collection/route.test.ts`
+  - [x] 3.2 Write property tests for the route handler in `app/api/bgg/collection/route.test.ts`
     - **Property 14: API Proxy XML Passthrough** — for any valid XML string returned by BGG with status 200, the handler returns that exact XML with `Content-Type: application/xml`
     - **Property 15: API Proxy Error Status Passthrough** — for any non-200, non-202 status from BGG, the handler returns a response with that same status code
     - Use MSW to mock the upstream BGG fetch; use Gherkin notation
     - **Validates: Requirements 2.2, 2.4, 2.6**
 
-- [ ] 4. XML parser
-  - [ ] 4.1 Create `lib/parse-collection.ts` implementing `parseCollection(xml: string): CollectionResult`
+- [x] 4. XML parser
+  - [x] 4.1 Create `lib/parse-collection.ts` implementing `parseCollection(xml: string): CollectionResult`
     - Use browser `DOMParser` to parse XML
     - Detect `<message>` root element and return `{ status: "not-found" }` or `{ status: "private" }` based on message content
     - Query `item[subtype='boardgame']` elements and map each to a `Game` object
@@ -51,7 +51,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Set optional fields (`thumbnail`, `yearPublished`, `bggRank`, `userRating`) to `null` when absent or "N/A"
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8_
 
-  - [ ] 4.2 Write unit tests for `parseCollection` in `lib/parse-collection.test.ts`
+  - [x] 4.2 Write unit tests for `parseCollection` in `lib/parse-collection.test.ts`
     - Test with a full XML fixture containing all fields
     - Test with a `<message>` root element (not-found and private cases)
     - Test with missing optional fields (`thumbnail`, `yearPublished`, `bggRank`, `userRating`)
@@ -59,7 +59,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Use Gherkin notation for all test descriptions
     - _Requirements: 3.2, 3.3, 3.4_
 
-  - [ ] 4.3 Write property tests for `parseCollection` in the same file under `describe("properties", ...)`
+  - [x] 4.3 Write property tests for `parseCollection` in the same file under `describe("properties", ...)`
     - **Property 1: XML Parsing Round-Trip** — for any `Game[]`, `JSON.parse(JSON.stringify(games))` produces a deeply equal array
     - **Property 2: Missing Optional Fields Produce Null, Not Errors** — for any XML with absent optional fields, parsing succeeds and those fields are `null`
     - Use `fc.assert` with `fast-check` arbitraries; include property number comments
