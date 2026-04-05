@@ -6,7 +6,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
 
 ## Tasks
 
-- [ ] 1. Project setup — dependencies, Shadcn, Tailwind theme, test infrastructure
+- [-] 1. Project setup — dependencies, Shadcn, Tailwind theme, test infrastructure
   - Install runtime dependencies: `@tanstack/react-query`, `msw`, `fast-check`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `vitest`, `@vitejs/plugin-react`, `jsdom`
   - Initialise Shadcn UI (`npx shadcn@latest init`) and add required components: `button`, `input`, `checkbox`, `slider`
   - Apply BGG color theme in `app/globals.css` using Tailwind v4 `@theme inline` block with `--color-bgg-orange: #FF5100` and `--color-bgg-navy: #1a1a2e`; define `:root` and `.dark` CSS custom property overrides for `--background`, `--foreground`, `--card`, `--primary`, `--muted`, `--border`, `--ring`
