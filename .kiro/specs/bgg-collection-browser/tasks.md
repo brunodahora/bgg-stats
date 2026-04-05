@@ -65,8 +65,8 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Use `fc.assert` with `fast-check` arbitraries; include property number comments
     - **Validates: Requirements 3.9, 3.4, 3.2, 3.7**
 
-- [ ] 5. Filter logic
-  - [ ] 5.1 Create `lib/filter-games.ts` implementing `filterGames(games: Game[], filters: FilterState): Game[]`
+- [x] 5. Filter logic
+  - [x] 5.1 Create `lib/filter-games.ts` implementing `filterGames(games: Game[], filters: FilterState): Game[]`
     - Weight filter: exclude games with `weight <= 0` when any category is selected; include only games whose `getWeightCategory(weight)` is in `filters.weightCategories`
     - Time filter: skip when at default full range; otherwise include games where `maxPlayingTime >= min AND minPlayingTime <= max`; exclude games where both times are 0 when filter is active
     - Recommended player count filter: include only games where `recommendedPlayerCounts.includes(N)` when not "any"
@@ -74,14 +74,14 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Export helper `collectionTimeRange(games: Game[]): [number, number]` returning `[min minPlayingTime, max maxPlayingTime]`
     - _Requirements: 5.2, 5.3, 5.4, 6.5, 6.6, 6.7, 7.2, 7.3, 8.2, 8.3, 9.1_
 
-  - [ ] 5.2 Write unit tests for `filterGames` in `lib/filter-games.test.ts`
+  - [x] 5.2 Write unit tests for `filterGames` in `lib/filter-games.test.ts`
     - Test each filter dimension in isolation with concrete game fixtures
     - Test combined filters (AND composition)
     - Test default `FilterState` returns all games unchanged
     - Use Gherkin notation
     - _Requirements: 5.2, 6.5, 7.2, 8.2, 9.1_
 
-  - [ ] 5.3 Write property tests for `filterGames` under `describe("properties", ...)` in the same file
+  - [x] 5.3 Write property tests for `filterGames` under `describe("properties", ...)` in the same file
     - **Property 3: Weight Filter Correctness** — every returned game's weight maps to one of the selected categories; games with `weight <= 0` excluded
     - **Property 4: Playing Time Filter Overlap Correctness** — every returned game satisfies `maxPlayingTime >= sliderMin AND minPlayingTime <= sliderMax`; games with both times 0 excluded
     - **Property 5: Recommended Player Count Filter Correctness** — every returned game has `N` in `recommendedPlayerCounts`
