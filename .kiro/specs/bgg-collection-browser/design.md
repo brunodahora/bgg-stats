@@ -614,6 +614,10 @@ it("Given any selection of weight categories, When filterGames is called, Then e
 });
 ```
 
+### Coverage Threshold
+
+All coverage metrics (lines, functions, branches, statements) must remain at or above **80%**. Run `pnpm test:coverage` to check. The following are excluded from coverage measurement: `components/ui/**` (Shadcn generated), `tests/**`, config files, and Next.js entry points (`app/layout.tsx`, `app/page.tsx`).
+
 
 ---
 

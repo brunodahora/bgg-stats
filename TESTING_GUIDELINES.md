@@ -32,6 +32,10 @@ We follow the [Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-an
 - **Avoid testing implementation details.** Don't assert on internal state, component method calls, or React internals. Assert on what the user sees and can do.
 - **Mock at the network boundary.** Use [MSW (Mock Service Worker)](https://mswjs.io/) to intercept HTTP requests rather than mocking `fetch` directly.
 
+### Coverage Threshold
+
+All coverage metrics (lines, functions, branches, statements) must remain at or above **80%**. This is enforced by Vitest's coverage configuration — `pnpm test:coverage` will fail if any metric drops below the threshold. Excluded from coverage: `components/ui/**` (Shadcn generated), `tests/**`, config files, and Next.js entry points (`app/layout.tsx`, `app/page.tsx`).
+
 ---
 
 ## Testing Libraries

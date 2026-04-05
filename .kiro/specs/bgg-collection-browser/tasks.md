@@ -6,7 +6,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
 
 ## Tasks
 
-- [-] 1. Project setup — dependencies, Shadcn, Tailwind theme, test infrastructure
+- [x] 1. Project setup — dependencies, Shadcn, Tailwind theme, test infrastructure
   - Install runtime dependencies: `@tanstack/react-query`, `msw`, `fast-check`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `vitest`, `@vitejs/plugin-react`, `jsdom`
   - Initialise Shadcn UI (`npx shadcn@latest init`) and add required components: `button`, `input`, `checkbox`, `slider`
   - Apply BGG color theme in `app/globals.css` using Tailwind v4 `@theme inline` block with `--color-bgg-orange: #FF5100` and `--color-bgg-navy: #1a1a2e`; define `:root` and `.dark` CSS custom property overrides for `--background`, `--foreground`, `--card`, `--primary`, `--muted`, `--border`, `--ring`
@@ -20,7 +20,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
   - Implement and export `getWeightCategory(weight: number): WeightCategory | null` in `lib/types.ts`
   - _Requirements: 3.1, 5.1, 6.1, 7.1, 8.1_
 
-  - [ ]* 2.2 Write unit tests for `getWeightCategory` in `lib/types.test.ts`
+  - [ ] 2.2 Write unit tests for `getWeightCategory` in `lib/types.test.ts`
     - Test boundary values: 0, 1.0, 2.0, 3.0, 4.0, 5.0 and values just above/below each boundary
     - Use Gherkin notation for all test descriptions
     - _Requirements: 5.2, 5.3_
@@ -35,7 +35,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Pass through non-200/non-202 status codes as JSON errors
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
 
-  - [ ]* 3.2 Write property tests for the route handler in `app/api/bgg/collection/route.test.ts`
+  - [ ] 3.2 Write property tests for the route handler in `app/api/bgg/collection/route.test.ts`
     - **Property 14: API Proxy XML Passthrough** — for any valid XML string returned by BGG with status 200, the handler returns that exact XML with `Content-Type: application/xml`
     - **Property 15: API Proxy Error Status Passthrough** — for any non-200, non-202 status from BGG, the handler returns a response with that same status code
     - Use MSW to mock the upstream BGG fetch; use Gherkin notation
@@ -51,7 +51,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Set optional fields (`thumbnail`, `yearPublished`, `bggRank`, `userRating`) to `null` when absent or "N/A"
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8_
 
-  - [ ]* 4.2 Write unit tests for `parseCollection` in `lib/parse-collection.test.ts`
+  - [ ] 4.2 Write unit tests for `parseCollection` in `lib/parse-collection.test.ts`
     - Test with a full XML fixture containing all fields
     - Test with a `<message>` root element (not-found and private cases)
     - Test with missing optional fields (`thumbnail`, `yearPublished`, `bggRank`, `userRating`)
@@ -59,7 +59,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Use Gherkin notation for all test descriptions
     - _Requirements: 3.2, 3.3, 3.4_
 
-  - [ ]* 4.3 Write property tests for `parseCollection` in the same file under `describe("properties", ...)`
+  - [ ] 4.3 Write property tests for `parseCollection` in the same file under `describe("properties", ...)`
     - **Property 1: XML Parsing Round-Trip** — for any `Game[]`, `JSON.parse(JSON.stringify(games))` produces a deeply equal array
     - **Property 2: Missing Optional Fields Produce Null, Not Errors** — for any XML with absent optional fields, parsing succeeds and those fields are `null`
     - Use `fc.assert` with `fast-check` arbitraries; include property number comments
@@ -74,14 +74,14 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Export helper `collectionTimeRange(games: Game[]): [number, number]` returning `[min minPlayingTime, max maxPlayingTime]`
     - _Requirements: 5.2, 5.3, 5.4, 6.5, 6.6, 6.7, 7.2, 7.3, 8.2, 8.3, 9.1_
 
-  - [ ]* 5.2 Write unit tests for `filterGames` in `lib/filter-games.test.ts`
+  - [ ] 5.2 Write unit tests for `filterGames` in `lib/filter-games.test.ts`
     - Test each filter dimension in isolation with concrete game fixtures
     - Test combined filters (AND composition)
     - Test default `FilterState` returns all games unchanged
     - Use Gherkin notation
     - _Requirements: 5.2, 6.5, 7.2, 8.2, 9.1_
 
-  - [ ]* 5.3 Write property tests for `filterGames` under `describe("properties", ...)` in the same file
+  - [ ] 5.3 Write property tests for `filterGames` under `describe("properties", ...)` in the same file
     - **Property 3: Weight Filter Correctness** — every returned game's weight maps to one of the selected categories; games with `weight <= 0` excluded
     - **Property 4: Playing Time Filter Overlap Correctness** — every returned game satisfies `maxPlayingTime >= sliderMin AND minPlayingTime <= sliderMax`; games with both times 0 excluded
     - **Property 5: Recommended Player Count Filter Correctness** — every returned game has `N` in `recommendedPlayerCounts`
@@ -119,13 +119,13 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - `clear()`: remove from `localStorage`, set state to `null`
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7_
 
-  - [ ]* 8.2 Write unit tests for `usePersistedUsername` in `lib/use-persisted-username.test.ts`
+  - [ ] 8.2 Write unit tests for `usePersistedUsername` in `lib/use-persisted-username.test.ts`
     - Mock `localStorage` via `vi.stubGlobal` or jsdom's built-in implementation
     - Test save with valid username, save with whitespace-only input, clear after save
     - Use Gherkin notation
     - _Requirements: 12.2, 12.3, 12.6_
 
-  - [ ]* 8.3 Write property tests under `describe("properties", ...)` in the same file
+  - [ ] 8.3 Write property tests under `describe("properties", ...)` in the same file
     - **Property 16: localStorage Save and Reject** — any non-empty non-whitespace string is persisted; any whitespace-only string is rejected and returns `false`
     - **Property 17: localStorage Clear Round-Trip** — after `save` then `clear`, `localStorage.getItem(STORAGE_KEY)` returns `null`
     - **Validates: Requirements 12.2, 12.3, 12.6**
@@ -139,7 +139,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Accept props: `onSubmit: (username: string) => void`, `initialUsername?: string`
     - _Requirements: 1.1, 1.3, 12.1, 12.2, 12.3, 12.6_
 
-  - [ ]* 9.2 Write integration tests for `UsernameForm` in `components/username-form.test.tsx`
+  - [ ] 9.2 Write integration tests for `UsernameForm` in `components/username-form.test.tsx`
     - Given an empty input, When the user clicks Load, Then a validation message is shown and `onSubmit` is not called
     - Given a whitespace-only input, When the user clicks Save, Then a validation message is shown and localStorage is not written
     - Given a valid username, When the user clicks Load, Then `onSubmit` is called with the trimmed username
@@ -165,7 +165,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Call `onChange` with the selected value or `"any"`
     - _Requirements: 7.1, 8.1_
 
-  - [ ]* 10.4 Write integration tests for filter components in `components/filters/weight-filter.test.tsx`, `time-filter.test.tsx`, `player-count-filter.test.tsx`
+  - [ ] 10.4 Write integration tests for filter components in `components/filters/weight-filter.test.tsx`, `time-filter.test.tsx`, `player-count-filter.test.tsx`
     - WeightFilter: Given no categories selected, When user selects "Medium", Then `onChange` is called with `["Medium"]`
     - TimeFilter: Given a range slider, When user moves the max handle, Then `onChange` is called with the updated range
     - PlayerCountFilter: Given "Any" selected, When user selects 4, Then `onChange` is called with `4`
@@ -179,7 +179,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Render year published, BGG rank ("N/A" when `null`), weight as `"{value.toFixed(1)} – {category}"`, playing time as `"{min}–{max} min"` or `"{N} min"` when equal, player count range as `"{minPlayers}–{maxPlayers}"`, user rating as `"{value.toFixed(1)}/10"` or "Not rated" when `null`
     - _Requirements: 4.1, 4.2, 4.6_
 
-  - [ ]* 11.2 Write integration tests for `GameCard` in `components/game-card.test.tsx`
+  - [ ] 11.2 Write integration tests for `GameCard` in `components/game-card.test.tsx`
     - Given a game with all fields populated, When the card is rendered, Then all fields are visible with correct formatting
     - Given a game with `thumbnail: null`, When the card is rendered, Then a placeholder image is shown
     - Given a game with `bggRank: null`, When the card is rendered, Then "N/A" is displayed
@@ -202,7 +202,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Show empty-state message when `filteredGames.length === 0` and collection is loaded
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 4.3, 4.4, 4.5, 9.2, 9.3, 9.4, 10.1, 10.2, 10.3, 10.4, 12.4, 12.7_
 
-  - [ ]* 12.2 Write integration tests for `CollectionBrowser` in `components/collection-browser.test.tsx`
+  - [ ] 12.2 Write integration tests for `CollectionBrowser` in `components/collection-browser.test.tsx`
     - Given a saved username in localStorage, When the page loads, Then the collection is fetched automatically
     - Given a username is submitted, When the fetch is in progress, Then a loading skeleton is shown
     - Given a fetch completes successfully, When games are returned, Then the game grid is visible with the correct count
@@ -237,7 +237,6 @@ Incremental implementation of a Next.js App Router application that fetches, par
 
 ## Notes
 
-- Tasks marked with `*` are optional and can be skipped for a faster MVP
 - Each task references specific requirements for traceability
 - Property tests use `fast-check` and live in `describe("properties", ...)` blocks co-located with unit tests
 - All test descriptions use Gherkin notation: `Given ... When ... Then ...`
