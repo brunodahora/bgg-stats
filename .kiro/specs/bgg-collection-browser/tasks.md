@@ -15,12 +15,12 @@ Incremental implementation of a Next.js App Router application that fetches, par
   - Create `tests/msw/server.ts` that sets up the MSW Node server for Vitest
   - _Requirements: 11.1, 11.2, 11.3_
 
-- [ ] 2. Core types and data models
-  - [ ] 2.1 Create `lib/types.ts` with `WeightCategory` union type, `Game` interface, `FilterState` interface, and `CollectionResult` discriminated union exactly as specified in the design
+- [x] 2. Core types and data models
+  - [x] 2.1 Create `lib/types.ts` with `WeightCategory` union type, `Game` interface, `FilterState` interface, and `CollectionResult` discriminated union exactly as specified in the design
   - Implement and export `getWeightCategory(weight: number): WeightCategory | null` in `lib/types.ts`
   - _Requirements: 3.1, 5.1, 6.1, 7.1, 8.1_
 
-  - [ ] 2.2 Write unit tests for `getWeightCategory` in `lib/types.test.ts`
+  - [x] 2.2 Write unit tests for `getWeightCategory` in `lib/types.test.ts`
     - Test boundary values: 0, 1.0, 2.0, 3.0, 4.0, 5.0 and values just above/below each boundary
     - Use Gherkin notation for all test descriptions
     - _Requirements: 5.2, 5.3_

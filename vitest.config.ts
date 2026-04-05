@@ -10,6 +10,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: "v8",
+      reporter: ["text", "text-summary"],
       thresholds: {
         lines: 80,
         functions: 80,
