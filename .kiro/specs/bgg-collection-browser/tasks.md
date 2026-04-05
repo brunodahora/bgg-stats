@@ -94,11 +94,11 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Include property number comments; use `fc.assert` with `fast-check` arbitraries
     - **Validates: Requirements 5.2, 5.3, 6.5, 6.7, 7.2, 8.2, 9.1, 9.2, 9.4, 6.2, 6.4**
 
-- [ ] 6. Custom SVG logo asset
-  - [ ] 6.1 Create `public/bgg-stats-logo.svg` as a self-contained SVG (`width="140" height="38"`) combining the BGG orange polygon mark, the white "BGG" text paths, and new white "Stats" text paths at the same baseline and visual weight
+- [x] 6. Custom SVG logo asset
+  - [x] 6.1 Create `public/bgg-stats-logo.svg` as a self-contained SVG (`width="140" height="38"`) combining the BGG orange polygon mark, the white "BGG" text paths, and new white "Stats" text paths at the same baseline and visual weight
     - _Requirements: 11.4, 11.5_
 
-  - [ ] 6.2 Create `components/bgg-logo.tsx` as a Client Component that renders the SVG inline (not as `<img>`) so fill colors can respond to CSS variables
+  - [x] 6.2 Create `components/bgg-logo.tsx` as a Client Component that renders the SVG inline (not as `<img>`) so fill colors can respond to CSS variables
     - _Requirements: 11.4_
 
 - [ ] 7. TanStack Query setup and collection hook
