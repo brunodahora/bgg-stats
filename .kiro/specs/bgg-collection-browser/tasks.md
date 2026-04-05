@@ -101,12 +101,12 @@ Incremental implementation of a Next.js App Router application that fetches, par
   - [x] 6.2 Create `components/bgg-logo.tsx` as a Client Component that renders the SVG inline (not as `<img>`) so fill colors can respond to CSS variables
     - _Requirements: 11.4_
 
-- [ ] 7. TanStack Query setup and collection hook
-  - [ ] 7.1 Create `app/providers.tsx` as a `'use client'` component wrapping children in `QueryClientProvider` with a stable `QueryClient` instance via `useState`
+- [x] 7. TanStack Query setup and collection hook
+  - [x] 7.1 Create `app/providers.tsx` as a `'use client'` component wrapping children in `QueryClientProvider` with a stable `QueryClient` instance via `useState`
   - Update `app/layout.tsx` to wrap the app in `<Providers>`
   - _Requirements: 1.2, 1.4, 1.5_
 
-  - [ ] 7.2 Create `lib/use-bgg-collection.ts` implementing `useBggCollection(username: string | null)`
+  - [x] 7.2 Create `lib/use-bgg-collection.ts` implementing `useBggCollection(username: string | null)`
     - Query key: `["bgg-collection", username]`
     - `queryFn`: fetch `/api/bgg/collection?username=...`, parse XML via `parseCollection`, return `CollectionResult`
     - `enabled: !!username`, `staleTime: 5 * 60 * 1000`, `retry: 2`, `retryDelay: (attempt) => attempt * 1000`
