@@ -225,14 +225,14 @@ Incremental implementation of a Next.js App Router application that fetches, par
   - Ensure the responsive grid in `GameGrid` uses Tailwind classes for 1 → 2 → 3 → 4 column breakpoints
   - _Requirements: 4.5, 11.1, 11.2, 11.3, 11.4_
 
-- [ ] 15. End-to-end wiring and final polish
-  - [ ] 15.1 Wire `app/globals.css` with the complete BGG Tailwind v4 theme (light and dark mode CSS custom properties) as specified in the design
-  - [ ] 15.2 Verify `app/layout.tsx` wraps the tree in `<Providers>` and applies the correct font variables
-  - [ ] 15.3 Update MSW handlers in `tests/msw/handlers.ts` with realistic BGG XML fixture responses for use across all integration tests
-  - [ ] 15.4 Run the full test suite (`vitest --run`) and fix any remaining failures
+- [x] 15. End-to-end wiring and final polish
+  - [x] 15.1 Wire `app/globals.css` with the complete BGG Tailwind v4 theme (light and dark mode CSS custom properties) as specified in the design
+  - [x] 15.2 Verify `app/layout.tsx` wraps the tree in `<Providers>` and applies the correct font variables
+  - [x] 15.3 Update MSW handlers in `tests/msw/handlers.ts` with realistic BGG XML fixture responses for use across all integration tests
+  - [x] 15.4 Run the full test suite (`vitest --run`) and fix any remaining failures
   - _Requirements: 11.1, 11.2, 11.3_
 
-- [ ] 16. Final checkpoint — ensure all tests pass
+- [x] 16. Final checkpoint — ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
