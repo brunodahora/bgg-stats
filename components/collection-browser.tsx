@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, startTransition } from "react";
+import { toast } from "sonner";
 import { useBggCollection } from "@/lib/use-bgg-collection";
 import { usePersistedUsername } from "@/lib/use-persisted-username";
 import {
@@ -42,7 +43,18 @@ export function CollectionBrowser() {
     }
   }, [savedUsername]);
 
-  const { data, isFetching, refetch } = useBggCollection(activeUsername);
+  const { data, isFetching } = useBggCollection(activeUsername);
+
+  // Show a toast when the API returns an error or loads successfully
+  useEffect(() => {
+    if (data?.status === "error") {
+      toast.error(data.message);
+    } else if (data?.status === "success") {
+      toast.success(
+        `Loaded ${data.games.length} game${data.games.length !== 1 ? "s" : ""}`,
+      );
+    }
+  }, [data]);
 
   const games = useMemo(
     () => (data?.status === "success" ? data.games : []),
@@ -120,19 +132,6 @@ export function CollectionBrowser() {
                   aria-hidden="true"
                 />
               ))}
-            </div>
-          )}
-
-          {/* Error state */}
-          {!isFetching && data?.status === "error" && (
-            <div
-              role="alert"
-              className="flex flex-col items-center gap-3 py-12 text-center"
-            >
-              <p className="text-destructive">{data.message}</p>
-              <Button variant="outline" onClick={() => refetch()}>
-                Retry
-              </Button>
             </div>
           )}
 

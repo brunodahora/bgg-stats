@@ -40,6 +40,17 @@ export async function GET(request: NextRequest) {
     }
 
     const xml = await res.text();
+
+    // BGG returns errors as XML with a 200 status, e.g. invalid username
+    if (xml.includes("<errors>")) {
+      const match = xml.match(/<message>([^<]+)<\/message>/);
+      const message = match?.[1] ?? "Unknown BGG error";
+      return new Response(JSON.stringify({ error: message }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     return new Response(xml, {
       status: 200,
       headers: { "Content-Type": "application/xml" },

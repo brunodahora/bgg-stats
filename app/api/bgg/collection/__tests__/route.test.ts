@@ -106,6 +106,27 @@ describe("GET /api/bgg/collection", () => {
     });
   });
 
+  describe("BGG XML error response", () => {
+    it("Given BGG returns an <errors> XML body with status 200, When the handler is called, Then it returns HTTP 400 with the error message as JSON", async () => {
+      const errorsXml = `<?xml version="1.0" encoding="utf-8" standalone="yes"?>\n<errors>\n\t<error>\n\t\t<message>Invalid username specified</message>\n\t</error>\n</errors>`;
+      server.use(
+        http.get(
+          BGG_COLLECTION_URL,
+          () =>
+            new HttpResponse(errorsXml, {
+              status: 200,
+              headers: { "Content-Type": "text/xml" },
+            }),
+        ),
+      );
+
+      const res = await GET(makeRequest("brunovh"));
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body.error).toBe("Invalid username specified");
+    });
+  });
+
   describe("error status passthrough", () => {
     it("Given BGG returns 404, When the handler is called, Then it returns HTTP 404", async () => {
       server.use(

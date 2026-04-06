@@ -1,4 +1,16 @@
-import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterEach,
+  afterAll,
+  vi,
+} from "vitest";
+
+vi.mock("sonner", () => ({
+  toast: { error: vi.fn(), success: vi.fn() },
+}));
 import * as fc from "fast-check";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -9,6 +21,7 @@ import { CollectionBrowser } from "../collection-browser";
 import { STORAGE_KEY } from "@/lib/use-persisted-username";
 import { filterGames } from "@/lib/filter-games";
 import type { FilterState, Game, ItemType } from "@/lib/types";
+import { toast } from "sonner";
 
 // ─── MSW Server ───────────────────────────────────────────────────────────────
 
@@ -18,6 +31,7 @@ beforeAll(() => server.listen({ onUnhandledRequest: "bypass" }));
 afterEach(() => {
   server.resetHandlers();
   localStorage.clear();
+  vi.clearAllMocks();
 });
 afterAll(() => server.close());
 
@@ -193,7 +207,7 @@ describe("CollectionBrowser", () => {
   });
 
   describe("successful fetch", () => {
-    it("Given a fetch completes successfully, When games are returned, Then the game grid is visible with the correct count", async () => {
+    it("Given a fetch completes successfully, When games are returned, Then the game grid is visible with the correct count and a success toast is shown", async () => {
       useCollectionHandler(COLLECTION_XML);
 
       renderBrowser();
@@ -207,11 +221,12 @@ describe("CollectionBrowser", () => {
       });
 
       expect(screen.getByText(/2 games/i)).toBeInTheDocument();
+      expect(toast.success).toHaveBeenCalledWith("Loaded 2 games");
     });
   });
 
   describe("error state", () => {
-    it("Given the API returns an error, When the error state is shown, Then a retry button is visible", async () => {
+    it("Given the API returns an error, When the response is received, Then a toast error is shown and the collection is not rendered", async () => {
       server.use(
         http.get("/api/bgg/collection", () =>
           HttpResponse.json({ error: "BGG API returned 500" }, { status: 500 }),
@@ -224,11 +239,12 @@ describe("CollectionBrowser", () => {
       await userEvent.click(screen.getByRole("button", { name: "Load" }));
 
       await waitFor(() => {
-        expect(screen.getByRole("alert")).toBeInTheDocument();
-        expect(
-          screen.getByRole("button", { name: "Retry" }),
-        ).toBeInTheDocument();
+        expect(toast.error).toHaveBeenCalledWith("BGG API returned 500");
       });
+
+      expect(
+        screen.queryByLabelText("Game collection"),
+      ).not.toBeInTheDocument();
     });
   });
 
