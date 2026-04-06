@@ -189,8 +189,8 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Use Gherkin notation
     - **Validates: Requirements 4.1, 4.2, 4.6; Property 11**
 
-- [ ] 12. CollectionBrowser orchestrator
-  - [ ] 12.1 Create `components/collection-browser.tsx` as the main Client Component orchestrating all state
+- [x] 12. CollectionBrowser orchestrator
+  - [x] 12.1 Create `components/collection-browser.tsx` as the main Client Component orchestrating all state
     - Initialise `filterState` with `useState<FilterState>` (default: empty weight categories, full time range, "any" player counts)
     - Use `usePersistedUsername()` to pre-fill username input and auto-trigger fetch on mount when `savedUsername` is non-null
     - Use `useBggCollection(activeUsername)` for fetch state
@@ -202,7 +202,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Show empty-state message when `filteredGames.length === 0` and collection is loaded
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 4.3, 4.4, 4.5, 9.2, 9.3, 9.4, 10.1, 10.2, 10.3, 10.4, 12.4, 12.7_
 
-  - [ ] 12.2 Write integration tests for `CollectionBrowser` in `components/collection-browser.test.tsx`
+  - [x] 12.2 Write integration tests for `CollectionBrowser` in `components/collection-browser.test.tsx`
     - Given a saved username in localStorage, When the page loads, Then the collection is fetched automatically
     - Given a username is submitted, When the fetch is in progress, Then a loading skeleton is shown
     - Given a fetch completes successfully, When games are returned, Then the game grid is visible with the correct count
@@ -216,7 +216,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Use MSW handlers from `tests/msw/handlers.ts`, `userEvent`, and Gherkin notation
     - **Validates: Requirements 1.1–1.6, 4.3, 4.4, 9.2, 9.3, 9.4, 10.1–10.4, 12.4, 12.7; Property 10**
 
-- [ ] 13. Checkpoint — ensure all tests pass
+- [x] 13. Checkpoint — ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 14. Page layout and header assembly
