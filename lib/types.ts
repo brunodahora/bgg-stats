@@ -5,6 +5,8 @@ export type WeightCategory =
   | "Medium Heavy"
   | "Heavy";
 
+export type ItemType = "standalone" | "expansion";
+
 export interface Game {
   id: number;
   name: string;
@@ -19,6 +21,7 @@ export interface Game {
   userRating: number | null;
   recommendedPlayerCounts: number[];
   bestPlayerCounts: number[];
+  itemType: ItemType;
 }
 
 export interface FilterState {
@@ -26,6 +29,7 @@ export interface FilterState {
   timeRange: [number, number]; // [min, max] in minutes
   recommendedPlayerCount: number | "any";
   bestPlayerCount: number | "any";
+  itemTypes: ItemType[]; // empty = all
 }
 
 export type CollectionResult =

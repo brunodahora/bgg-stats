@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CollectionBrowser } from "../collection-browser";
 import { STORAGE_KEY } from "@/lib/use-persisted-username";
 import { filterGames } from "@/lib/filter-games";
-import type { FilterState, Game } from "@/lib/types";
+import type { FilterState, Game, ItemType } from "@/lib/types";
 
 // ─── MSW Server ───────────────────────────────────────────────────────────────
 
@@ -288,6 +288,59 @@ describe("CollectionBrowser", () => {
     });
   });
 
+  describe("item type filter", () => {
+    it("Given games of both types are loaded, When the user selects 'Standalone', Then only standalone games are visible", async () => {
+      // The COLLECTION_XML fixture has one boardgame and one boardgameexpansion
+      const MIXED_XML = `<?xml version="1.0" encoding="utf-8"?>
+<items totalitems="2" termsofuse="" pubdate="">
+  <item objectid="1" subtype="boardgame">
+    <name sortindex="1">Base Game</name>
+    <thumbnail>https://example.com/base.jpg</thumbnail>
+    <yearpublished>2020</yearpublished>
+    <stats minplayers="2" maxplayers="4" minplaytime="60" maxplaytime="90">
+      <rating value="8.0">
+        <ranks><rank type="subtype" id="1" name="boardgame" value="10" bayesaverage="7.9"/></ranks>
+        <averageweight value="2.5"/>
+      </rating>
+    </stats>
+    <poll name="suggested_numplayers" totalvotes="0"></poll>
+  </item>
+  <item objectid="2" subtype="boardgameexpansion">
+    <name sortindex="1">Expansion Pack</name>
+    <thumbnail>https://example.com/exp.jpg</thumbnail>
+    <yearpublished>2021</yearpublished>
+    <stats minplayers="2" maxplayers="4" minplaytime="60" maxplaytime="90">
+      <rating value="7.5">
+        <ranks><rank type="subtype" id="1" name="boardgame" value="50" bayesaverage="7.4"/></ranks>
+        <averageweight value="2.5"/>
+      </rating>
+    </stats>
+    <poll name="suggested_numplayers" totalvotes="0"></poll>
+  </item>
+</items>`;
+
+      useCollectionHandler(MIXED_XML);
+      renderBrowser();
+
+      await userEvent.type(screen.getByRole("textbox"), "testuser");
+      await userEvent.click(screen.getByRole("button", { name: "Load" }));
+
+      await waitFor(() => {
+        expect(screen.getByText("Base Game")).toBeInTheDocument();
+        expect(screen.getByText("Expansion Pack")).toBeInTheDocument();
+      });
+
+      await userEvent.click(
+        screen.getByRole("checkbox", { name: "Standalone" }),
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText("Base Game")).toBeInTheDocument();
+        expect(screen.queryByText("Expansion Pack")).not.toBeInTheDocument();
+      });
+    });
+  });
+
   describe("reset filters", () => {
     it("Given games are loaded, When the user clicks Reset Filters, Then all games are shown again", async () => {
       useCollectionHandler(COLLECTION_XML);
@@ -364,6 +417,7 @@ const gameArbitrary: fc.Arbitrary<Game> = fc.record({
   ),
   recommendedPlayerCounts: fc.array(fc.integer({ min: 1, max: 10 })),
   bestPlayerCounts: fc.array(fc.integer({ min: 1, max: 10 })),
+  itemType: fc.constantFrom("standalone" as ItemType, "expansion" as ItemType),
 });
 
 const filterStateArbitrary: fc.Arbitrary<FilterState> = fc.record({
@@ -388,6 +442,10 @@ const filterStateArbitrary: fc.Arbitrary<FilterState> = fc.record({
   bestPlayerCount: fc.oneof(
     fc.constantFrom("any" as const),
     fc.integer({ min: 1, max: 10 }),
+  ),
+  itemTypes: fc.array(
+    fc.constantFrom("standalone" as ItemType, "expansion" as ItemType),
+    { maxLength: 2 },
   ),
 });
 

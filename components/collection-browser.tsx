@@ -13,6 +13,7 @@ import { UsernameForm } from "@/components/username-form";
 import { WeightFilter } from "@/components/filters/weight-filter";
 import { TimeFilter } from "@/components/filters/time-filter";
 import { PlayerCountFilter } from "@/components/filters/player-count-filter";
+import { ItemTypeFilter } from "@/components/filters/item-type-filter";
 import { GameCard } from "@/components/game-card";
 import { BggLogo } from "@/components/bgg-logo";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ const DEFAULT_FILTER_STATE: FilterState = {
   timeRange: [0, 0],
   recommendedPlayerCount: "any",
   bestPlayerCount: "any",
+  itemTypes: [],
 };
 
 export function CollectionBrowser() {
@@ -158,7 +160,7 @@ export function CollectionBrowser() {
               aria-label="Filters"
               className="flex flex-col gap-6 p-4 rounded-lg border bg-card"
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                 <div>
                   <h2 className="text-sm font-semibold mb-2">Weight</h2>
                   <WeightFilter
@@ -206,6 +208,16 @@ export function CollectionBrowser() {
                         ...prev,
                         bestPlayerCount: value,
                       }))
+                    }
+                  />
+                </div>
+
+                <div>
+                  <h2 className="text-sm font-semibold mb-2">Type</h2>
+                  <ItemTypeFilter
+                    selected={filterState.itemTypes}
+                    onChange={(types) =>
+                      setFilterState((prev) => ({ ...prev, itemTypes: types }))
                     }
                   />
                 </div>

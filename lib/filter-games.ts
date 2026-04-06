@@ -24,6 +24,7 @@ export function countActiveFilters(
     count++;
   if (filters.recommendedPlayerCount !== "any") count++;
   if (filters.bestPlayerCount !== "any") count++;
+  if (filters.itemTypes.length > 0) count++;
   return count;
 }
 
@@ -58,6 +59,11 @@ export function filterGames(games: Game[], filters: FilterState): Game[] {
     if (filters.bestPlayerCount !== "any") {
       if (!game.bestPlayerCounts.includes(filters.bestPlayerCount))
         return false;
+    }
+
+    // Item type filter
+    if (filters.itemTypes.length > 0) {
+      if (!filters.itemTypes.includes(game.itemType)) return false;
     }
 
     return true;

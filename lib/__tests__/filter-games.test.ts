@@ -7,7 +7,7 @@ import {
   countActiveFilters,
 } from "../filter-games";
 import { getWeightCategory } from "../types";
-import type { Game, FilterState, WeightCategory } from "../types";
+import type { Game, FilterState, WeightCategory, ItemType } from "../types";
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -26,6 +26,7 @@ function makeGame(overrides: Partial<Game> = {}): Game {
     userRating: 7.5,
     recommendedPlayerCounts: [3, 4],
     bestPlayerCounts: [4],
+    itemType: "standalone",
     ...overrides,
   };
 }
@@ -50,6 +51,7 @@ const defaultFilters = (games: Game[]): FilterState => ({
   timeRange: collectionTimeRange(games),
   recommendedPlayerCount: "any",
   bestPlayerCount: "any",
+  itemTypes: [],
 });
 
 // ─── Unit Tests ───────────────────────────────────────────────────────────────
@@ -250,6 +252,51 @@ describe("filterGames", () => {
     });
   });
 
+  describe("itemType filter", () => {
+    const standaloneGame = makeGame({
+      id: 100,
+      name: "Standalone Game",
+      itemType: "standalone",
+    });
+    const expansionGame = makeGame({
+      id: 101,
+      name: "Expansion Game",
+      itemType: "expansion",
+    });
+
+    it("Given games of both types, When itemTypes is ['standalone'], Then only standalone games are returned", () => {
+      const games = [standaloneGame, expansionGame];
+      const filters: FilterState = {
+        ...defaultFilters(games),
+        itemTypes: ["standalone"],
+      };
+      expect(filterGames(games, filters)).toEqual([standaloneGame]);
+    });
+
+    it("Given games of both types, When itemTypes is ['expansion'], Then only expansion games are returned", () => {
+      const games = [standaloneGame, expansionGame];
+      const filters: FilterState = {
+        ...defaultFilters(games),
+        itemTypes: ["expansion"],
+      };
+      expect(filterGames(games, filters)).toEqual([expansionGame]);
+    });
+
+    it("Given games of both types, When itemTypes is empty, Then all games are returned", () => {
+      const games = [standaloneGame, expansionGame];
+      expect(filterGames(games, defaultFilters(games))).toHaveLength(2);
+    });
+
+    it("Given games of both types, When itemTypes contains both values, Then all games are returned", () => {
+      const games = [standaloneGame, expansionGame];
+      const filters: FilterState = {
+        ...defaultFilters(games),
+        itemTypes: ["standalone", "expansion"],
+      };
+      expect(filterGames(games, filters)).toHaveLength(2);
+    });
+  });
+
   describe("combined filters (AND composition)", () => {
     it("Given games with mixed attributes, When weight and recommendedPlayerCount filters are both active, Then only games matching both are returned", () => {
       const match = makeGame({
@@ -356,15 +403,16 @@ describe("countActiveFilters", () => {
     expect(countActiveFilters(filters, games)).toBe(1);
   });
 
-  it("Given all four filter dimensions are active, When countActiveFilters is called, Then it returns 4", () => {
+  it("Given all five filter dimensions are active, When countActiveFilters is called, Then it returns 5", () => {
     const games = [makeGame({ minPlayingTime: 0, maxPlayingTime: 300 })];
     const filters: FilterState = {
       weightCategories: ["Medium"],
       timeRange: [10, 200],
       recommendedPlayerCount: 3,
       bestPlayerCount: 4,
+      itemTypes: ["standalone"],
     };
-    expect(countActiveFilters(filters, games)).toBe(4);
+    expect(countActiveFilters(filters, games)).toBe(5);
   });
 });
 
@@ -386,6 +434,7 @@ const gameArbitrary: fc.Arbitrary<Game> = fc.record({
   }),
   recommendedPlayerCounts: fc.array(fc.integer({ min: 1, max: 10 })),
   bestPlayerCounts: fc.array(fc.integer({ min: 1, max: 10 })),
+  itemType: fc.constantFrom("standalone" as ItemType, "expansion" as ItemType),
 });
 
 const weightCategoryArbitrary: fc.Arbitrary<WeightCategory> = fc.constantFrom(
@@ -542,8 +591,13 @@ describe("properties", () => {
         fc.array(weightCategoryArbitrary, { maxLength: 5 }),
         fc.integer({ min: 1, max: 10 }),
         fc.integer({ min: 1, max: 10 }),
-        (games, categories, recN, bestN) => {
+        fc.array(
+          fc.constantFrom("standalone" as ItemType, "expansion" as ItemType),
+          { maxLength: 2 },
+        ),
+        (games, categories, recN, bestN, itemTypes) => {
           const uniqueCategories = [...new Set(categories)] as WeightCategory[];
+          const uniqueItemTypes = [...new Set(itemTypes)] as ItemType[];
           const [collMin, collMax] = collectionTimeRange(games);
           // Use a sub-range that differs from the full range to make time filter active
           const timeMin = Math.max(0, collMin + 1);
@@ -555,6 +609,7 @@ describe("properties", () => {
             timeRange: timeActive ? [timeMin, timeMax] : [collMin, collMax],
             recommendedPlayerCount: recN,
             bestPlayerCount: bestN,
+            itemTypes: uniqueItemTypes,
           };
 
           let expected = 0;
@@ -562,8 +617,31 @@ describe("properties", () => {
           if (timeActive) expected++;
           expected++; // recommendedPlayerCount is always non-"any" here
           expected++; // bestPlayerCount is always non-"any" here
+          if (uniqueItemTypes.length > 0) expected++;
 
           return countActiveFilters(filters, games) === expected;
+        },
+      ),
+    );
+  });
+
+  // Property: Item Type Filter Correctness
+  it("Given any non-empty itemTypes selection, When filterGames is called, Then every returned game's itemType is in the selected types", () => {
+    fc.assert(
+      fc.property(
+        fc.array(gameArbitrary, { maxLength: 20 }),
+        fc.array(
+          fc.constantFrom("standalone" as ItemType, "expansion" as ItemType),
+          { minLength: 1, maxLength: 2 },
+        ),
+        (games, types) => {
+          const uniqueTypes = [...new Set(types)] as ItemType[];
+          const filters: FilterState = {
+            ...defaultFilters(games),
+            itemTypes: uniqueTypes,
+          };
+          const result = filterGames(games, filters);
+          return result.every((g) => uniqueTypes.includes(g.itemType));
         },
       ),
     );

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import * as fc from "fast-check";
 import { render, screen } from "@testing-library/react";
 import { GameCard } from "../game-card";
-import type { Game } from "@/lib/types";
+import type { Game, ItemType } from "@/lib/types";
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -21,6 +21,7 @@ function makeGame(overrides: Partial<Game> = {}): Game {
     userRating: 9.5,
     recommendedPlayerCounts: [2, 3, 4],
     bestPlayerCounts: [3],
+    itemType: "standalone",
     ...overrides,
   };
 }
@@ -110,6 +111,7 @@ const gameArbitrary: fc.Arbitrary<Game> = fc.record({
   ),
   recommendedPlayerCounts: fc.array(fc.integer({ min: 1, max: 10 })),
   bestPlayerCounts: fc.array(fc.integer({ min: 1, max: 10 })),
+  itemType: fc.constantFrom("standalone" as ItemType, "expansion" as ItemType),
 });
 
 describe("properties", () => {

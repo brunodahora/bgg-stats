@@ -1,4 +1,4 @@
-import type { CollectionResult, Game } from "./types";
+import type { CollectionResult, Game, ItemType } from "./types";
 
 function parsePlayerCountPoll(
   item: Element,
@@ -44,7 +44,9 @@ export function parseCollection(xml: string): CollectionResult {
     return { status: "not-found" };
   }
 
-  const items = doc.querySelectorAll("item[subtype='boardgame']");
+  const items = doc.querySelectorAll(
+    "item[subtype='boardgame'], item[subtype='boardgameexpansion']",
+  );
   const games: Game[] = [];
 
   for (const item of items) {
@@ -99,6 +101,10 @@ export function parseCollection(xml: string): CollectionResult {
     const recommendedPlayerCounts = parsePlayerCountPoll(item, "Recommended");
     const bestPlayerCounts = parsePlayerCountPoll(item, "Best");
 
+    const subtype = item.getAttribute("subtype");
+    const itemType: ItemType =
+      subtype === "boardgameexpansion" ? "expansion" : "standalone";
+
     games.push({
       id,
       name,
@@ -113,6 +119,7 @@ export function parseCollection(xml: string): CollectionResult {
       userRating: userRating != null && isNaN(userRating) ? null : userRating,
       recommendedPlayerCounts,
       bestPlayerCounts,
+      itemType,
     });
   }
 

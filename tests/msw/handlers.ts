@@ -2,7 +2,7 @@ import { http, HttpResponse } from "msw";
 
 // Realistic BGG XML fixture with one game (Gloomhaven)
 export const BGG_COLLECTION_XML = `<?xml version="1.0" encoding="utf-8"?>
-<items totalitems="1" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse" pubdate="Sun, 01 Jan 2023 00:00:00 +0000">
+<items totalitems="2" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse" pubdate="Sun, 01 Jan 2023 00:00:00 +0000">
   <item objectid="174430" subtype="boardgame">
     <name sortindex="1">Gloomhaven</name>
     <thumbnail>https://example.com/thumb.jpg</thumbnail>
@@ -39,6 +39,35 @@ export const BGG_COLLECTION_XML = `<?xml version="1.0" encoding="utf-8"?>
         <result value="Best" numvotes="40"/>
         <result value="Recommended" numvotes="50"/>
         <result value="Not Recommended" numvotes="10"/>
+      </results>
+    </poll>
+  </item>
+  <item objectid="291457" subtype="boardgameexpansion">
+    <name sortindex="1">Gloomhaven: Jaws of the Lion</name>
+    <thumbnail>https://example.com/thumb2.jpg</thumbnail>
+    <yearpublished>2020</yearpublished>
+    <stats minplayers="1" maxplayers="4" minplaytime="30" maxplaytime="60">
+      <rating value="8.0">
+        <usersrated value="20000"/>
+        <average value="8.0"/>
+        <stddev value="1.2"/>
+        <median value="0"/>
+        <ranks>
+          <rank type="subtype" id="1" name="boardgame" friendlyname="Board Game Rank" value="5" bayesaverage="7.9"/>
+        </ranks>
+      </rating>
+      <averageweight value="2.50"/>
+    </stats>
+    <poll name="suggested_numplayers" title="User Suggested: # of Players" totalvotes="50">
+      <results numplayers="1">
+        <result value="Best" numvotes="10"/>
+        <result value="Recommended" numvotes="30"/>
+        <result value="Not Recommended" numvotes="10"/>
+      </results>
+      <results numplayers="2">
+        <result value="Best" numvotes="20"/>
+        <result value="Recommended" numvotes="25"/>
+        <result value="Not Recommended" numvotes="5"/>
       </results>
     </poll>
   </item>

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import * as fc from "fast-check";
 import { parseCollection } from "../parse-collection";
-import type { Game } from "../types";
+import type { Game, ItemType } from "../types";
 
 // Full XML fixture with all fields populated
 const FULL_XML = `<?xml version="1.0" encoding="utf-8"?>
@@ -165,6 +165,69 @@ describe("parseCollection", () => {
         expect(game.bestPlayerCounts).not.toContain(4);
       }
     });
+
+    it("Given a full BGG XML response with subtype boardgame, When parsed, Then itemType is 'standalone'", () => {
+      const result = parseCollection(FULL_XML);
+      expect(result.status).toBe("success");
+      if (result.status === "success") {
+        expect(result.games[0].itemType).toBe("standalone");
+      }
+    });
+  });
+
+  describe("expansion item", () => {
+    const EXPANSION_XML = `<?xml version="1.0" encoding="utf-8"?>
+<items totalitems="1" termsofuse="" pubdate="">
+  <item objectid="291457" subtype="boardgameexpansion" collid="99">
+    <name sortindex="1">Gloomhaven: Forgotten Circles</name>
+    <stats minplayers="1" maxplayers="2" minplaytime="30" maxplaytime="60" numowned="5000">
+      <rating value="7.5">
+        <ranks>
+          <rank type="subtype" id="1" name="boardgame" friendlyname="Board Game Rank" value="200" bayesaverage="7.4"/>
+        </ranks>
+        <averageweight value="3.5"/>
+      </rating>
+    </stats>
+  </item>
+</items>`;
+
+    it("Given XML with subtype boardgameexpansion, When parsed, Then itemType is 'expansion'", () => {
+      const result = parseCollection(EXPANSION_XML);
+      expect(result.status).toBe("success");
+      if (result.status === "success") {
+        expect(result.games).toHaveLength(1);
+        expect(result.games[0].itemType).toBe("expansion");
+      }
+    });
+
+    it("Given XML with both boardgame and boardgameexpansion items, When parsed, Then both are included with correct itemTypes", () => {
+      const MIXED_XML = `<?xml version="1.0" encoding="utf-8"?>
+<items totalitems="2" termsofuse="" pubdate="">
+  <item objectid="174430" subtype="boardgame" collid="1">
+    <name sortindex="1">Gloomhaven</name>
+    <stats minplayers="1" maxplayers="4" minplaytime="60" maxplaytime="120" numowned="100000">
+      <rating value="N/A"><ranks/><averageweight value="3.86"/></rating>
+    </stats>
+  </item>
+  <item objectid="291457" subtype="boardgameexpansion" collid="2">
+    <name sortindex="1">Gloomhaven: Forgotten Circles</name>
+    <stats minplayers="1" maxplayers="2" minplaytime="30" maxplaytime="60" numowned="5000">
+      <rating value="N/A"><ranks/><averageweight value="3.5"/></rating>
+    </stats>
+  </item>
+</items>`;
+      const result = parseCollection(MIXED_XML);
+      expect(result.status).toBe("success");
+      if (result.status === "success") {
+        expect(result.games).toHaveLength(2);
+        expect(result.games.find((g) => g.id === 174430)?.itemType).toBe(
+          "standalone",
+        );
+        expect(result.games.find((g) => g.id === 291457)?.itemType).toBe(
+          "expansion",
+        );
+      }
+    });
   });
 
   describe("message root element", () => {
@@ -241,6 +304,7 @@ const gameArbitrary: fc.Arbitrary<Game> = fc.record({
   bestPlayerCounts: fc.array(fc.integer({ min: 1, max: 10 }), {
     maxLength: 10,
   }),
+  itemType: fc.constantFrom("standalone" as ItemType, "expansion" as ItemType),
 });
 
 describe("properties", () => {

@@ -235,6 +235,23 @@ Incremental implementation of a Next.js App Router application that fetches, par
 - [x] 16. Final checkpoint — ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
+- [-] 17. Item type filter (standalone vs expansion)
+  - [x] 17.1 Add `ItemType = "standalone" | "expansion"` to `lib/types.ts`; add `itemType: ItemType` field to `Game`; add `itemTypes: ItemType[]` to `FilterState` (empty = all)
+  - [x] 17.2 Update `lib/parse-collection.ts` to query both `item[subtype='boardgame']` and `item[subtype='boardgameexpansion']`; derive `itemType` from the `subtype` attribute
+  - [x] 17.3 Update `lib/filter-games.ts` to filter by `itemTypes` when non-empty; update `countActiveFilters` to count `itemTypes` as an active filter when non-empty
+  - [x] 17.4 Create `components/filters/item-type-filter.tsx` with two checkboxes: "Standalone" and "Expansion"; call `onChange` with updated `ItemType[]` on toggle
+  - [x] 17.5 Wire `ItemTypeFilter` into `CollectionBrowser`: add `itemTypes: []` to `DEFAULT_FILTER_STATE`; render the filter in the filter panel
+  - [x] 17.6 Update `tests/msw/handlers.ts` fixture to include one `boardgameexpansion` item alongside the existing `boardgame` item
+  - [-] 17.7 Write integration tests for `ItemTypeFilter` in `components/filters/__tests__/item-type-filter.test.tsx`
+    - Given both types unchecked (default), When rendered, Then both checkboxes are unchecked
+    - Given both types unchecked, When user checks "Expansion", Then `onChange` is called with `["expansion"]`
+    - Given "Expansion" checked, When user unchecks it, Then `onChange` is called with `[]`
+  - [-] 17.8 Write unit/property tests for the item type filter in `lib/__tests__/filter-games.test.ts`
+    - Given only "standalone" selected, When `filterGames` is called, Then only standalone games are returned
+    - Given only "expansion" selected, When `filterGames` is called, Then only expansion games are returned
+    - Given empty `itemTypes`, When `filterGames` is called, Then all games are returned regardless of type
+    - **Property: Item Type Filter Correctness** — every returned game's `itemType` is in `filters.itemTypes` when non-empty
+
 ## Notes
 
 - Each task references specific requirements for traceability
