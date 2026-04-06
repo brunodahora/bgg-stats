@@ -130,8 +130,8 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - **Property 17: localStorage Clear Round-Trip** — after `save` then `clear`, `localStorage.getItem(STORAGE_KEY)` returns `null`
     - **Validates: Requirements 12.2, 12.3, 12.6**
 
-- [ ] 9. Username form component
-  - [ ] 9.1 Create `components/username-form.tsx` as a Client Component
+- [x] 9. Username form component
+  - [x] 9.1 Create `components/username-form.tsx` as a Client Component
     - Render a text `Input`, a "Load" `Button`, a "Save" `Button`, and a "Clear" `Button` (Shadcn components)
     - On "Load" submit: validate non-empty/non-whitespace; show inline validation message if invalid; call `onSubmit(username)` if valid
     - On "Save": call `usePersistedUsername().save`; show inline validation message on rejection
@@ -139,7 +139,7 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Accept props: `onSubmit: (username: string) => void`, `initialUsername?: string`
     - _Requirements: 1.1, 1.3, 12.1, 12.2, 12.3, 12.6_
 
-  - [ ] 9.2 Write integration tests for `UsernameForm` in `components/username-form.test.tsx`
+  - [x] 9.2 Write integration tests for `UsernameForm` in `components/username-form.test.tsx`
     - Given an empty input, When the user clicks Load, Then a validation message is shown and `onSubmit` is not called
     - Given a whitespace-only input, When the user clicks Save, Then a validation message is shown and localStorage is not written
     - Given a valid username, When the user clicks Load, Then `onSubmit` is called with the trimmed username
@@ -148,38 +148,38 @@ Incremental implementation of a Next.js App Router application that fetches, par
     - Use `userEvent`, Gherkin notation, MSW for any network assertions
     - **Validates: Requirements 1.1, 1.3, 12.1, 12.2, 12.3, 12.6; Property 18**
 
-- [ ] 10. Filter components
-  - [ ] 10.1 Create `components/filters/weight-filter.tsx` implementing `WeightFilterProps`
+- [x] 10. Filter components
+  - [x] 10.1 Create `components/filters/weight-filter.tsx` implementing `WeightFilterProps`
     - Render five Shadcn `Checkbox` controls labelled Light, Medium Light, Medium, Medium Heavy, Heavy
     - Call `onChange` with the updated `WeightCategory[]` on each toggle
     - _Requirements: 5.1_
 
-  - [ ] 10.2 Create `components/filters/time-filter.tsx` implementing `TimeFilterProps`
+  - [x] 10.2 Create `components/filters/time-filter.tsx` implementing `TimeFilterProps`
     - Render a Shadcn dual-handle `Slider` with `min`, `max`, and `value` props
     - Display the current range label as `"{value[0]}–{value[1]} min"`
     - Call `onChange` with the new `[number, number]` tuple on slider change
     - _Requirements: 6.1, 6.3, 6.4_
 
-  - [ ] 10.3 Create `components/filters/player-count-filter.tsx` implementing `PlayerCountFilterProps`
+  - [x] 10.3 Create `components/filters/player-count-filter.tsx` implementing `PlayerCountFilterProps`
     - Render selectable values 1–10 and "Any" (e.g. as toggle buttons or a select)
     - Call `onChange` with the selected value or `"any"`
     - _Requirements: 7.1, 8.1_
 
-  - [ ] 10.4 Write integration tests for filter components in `components/filters/weight-filter.test.tsx`, `time-filter.test.tsx`, `player-count-filter.test.tsx`
+  - [x] 10.4 Write integration tests for filter components in `components/filters/weight-filter.test.tsx`, `time-filter.test.tsx`, `player-count-filter.test.tsx`
     - WeightFilter: Given no categories selected, When user selects "Medium", Then `onChange` is called with `["Medium"]`
     - TimeFilter: Given a range slider, When user moves the max handle, Then `onChange` is called with the updated range
     - PlayerCountFilter: Given "Any" selected, When user selects 4, Then `onChange` is called with `4`
     - Use `userEvent` and Gherkin notation
     - _Requirements: 5.1, 6.1, 7.1, 8.1_
 
-- [ ] 11. GameCard component
-  - [ ] 11.1 Create `components/game-card.tsx` implementing `GameCardProps`
+- [x] 11. GameCard component
+  - [x] 11.1 Create `components/game-card.tsx` implementing `GameCardProps`
     - Render thumbnail (or placeholder when `null`) using Next.js `<Image>`
     - Render game name as a link to `https://boardgamegeek.com/boardgame/{id}`
     - Render year published, BGG rank ("N/A" when `null`), weight as `"{value.toFixed(1)} – {category}"`, playing time as `"{min}–{max} min"` or `"{N} min"` when equal, player count range as `"{minPlayers}–{maxPlayers}"`, user rating as `"{value.toFixed(1)}/10"` or "Not rated" when `null`
     - _Requirements: 4.1, 4.2, 4.6_
 
-  - [ ] 11.2 Write integration tests for `GameCard` in `components/game-card.test.tsx`
+  - [x] 11.2 Write integration tests for `GameCard` in `components/game-card.test.tsx`
     - Given a game with all fields populated, When the card is rendered, Then all fields are visible with correct formatting
     - Given a game with `thumbnail: null`, When the card is rendered, Then a placeholder image is shown
     - Given a game with `bggRank: null`, When the card is rendered, Then "N/A" is displayed
