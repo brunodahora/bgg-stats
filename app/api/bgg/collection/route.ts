@@ -16,8 +16,13 @@ export async function GET(request: NextRequest) {
 
   const url = `${BGG_BASE}/collection?username=${encodeURIComponent(username)}&stats=1&own=1`;
 
+  const headers: HeadersInit = {};
+  if (process.env.BGG_API_TOKEN) {
+    headers["Authorization"] = `Bearer ${process.env.BGG_API_TOKEN}`;
+  }
+
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, { cache: "no-store", headers });
 
     if (res.status === 202) {
       if (attempt < MAX_RETRIES) {
