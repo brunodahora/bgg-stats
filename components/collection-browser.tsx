@@ -93,7 +93,12 @@ export function CollectionBrowser() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border px-4 py-3">
-        <BggLogo />
+        <div className="max-w-7xl mx-auto flex items-center gap-3">
+          <BggLogo />
+          <span className="text-sm text-muted-foreground hidden sm:inline">
+            Collection Browser
+          </span>
+        </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6 flex flex-col gap-6">

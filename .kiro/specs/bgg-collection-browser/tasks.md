@@ -219,9 +219,9 @@ Incremental implementation of a Next.js App Router application that fetches, par
 - [x] 13. Checkpoint — ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 14. Page layout and header assembly
-  - [ ] 14.1 Update `app/page.tsx` to render `<CollectionBrowser />` as the sole page content
-  - [ ] 14.2 Create a `Header` section inside `CollectionBrowser` (or as a separate `components/header.tsx`) that renders `<BggLogo />` and a page title
+- [x] 14. Page layout and header assembly
+  - [x] 14.1 Update `app/page.tsx` to render `<CollectionBrowser />` as the sole page content
+  - [x] 14.2 Create a `Header` section inside `CollectionBrowser` (or as a separate `components/header.tsx`) that renders `<BggLogo />` and a page title
   - Ensure the responsive grid in `GameGrid` uses Tailwind classes for 1 → 2 → 3 → 4 column breakpoints
   - _Requirements: 4.5, 11.1, 11.2, 11.3, 11.4_
 
