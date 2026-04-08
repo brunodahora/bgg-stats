@@ -357,6 +357,78 @@ describe("CollectionBrowser", () => {
     });
   });
 
+  describe("view toggle", () => {
+    it("Given a collection is loaded, When the page first renders, Then the card view is shown by default", async () => {
+      useCollectionHandler(COLLECTION_XML);
+      renderBrowser();
+
+      await userEvent.type(screen.getByRole("textbox"), "testuser");
+      await userEvent.click(screen.getByRole("button", { name: "Load" }));
+
+      await waitFor(() => {
+        expect(screen.getByText("Ticket to Ride")).toBeInTheDocument();
+      });
+
+      expect(screen.getByLabelText("Game collection")).toBeInTheDocument();
+      expect(screen.queryByRole("table")).not.toBeInTheDocument();
+    });
+
+    it("Given a collection is loaded, When the user clicks the Table toggle, Then the table view is shown", async () => {
+      useCollectionHandler(COLLECTION_XML);
+      renderBrowser();
+
+      await userEvent.type(screen.getByRole("textbox"), "testuser");
+      await userEvent.click(screen.getByRole("button", { name: "Load" }));
+
+      await waitFor(() => {
+        expect(screen.getByText("Ticket to Ride")).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole("button", { name: "Table" }));
+
+      expect(screen.getByRole("table")).toBeInTheDocument();
+      expect(
+        screen.queryByLabelText("Game collection"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("Given the table view is active, When the user clicks the Cards toggle, Then the card view is shown again", async () => {
+      useCollectionHandler(COLLECTION_XML);
+      renderBrowser();
+
+      await userEvent.type(screen.getByRole("textbox"), "testuser");
+      await userEvent.click(screen.getByRole("button", { name: "Load" }));
+
+      await waitFor(() => {
+        expect(screen.getByText("Ticket to Ride")).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole("button", { name: "Table" }));
+      await userEvent.click(screen.getByRole("button", { name: "Cards" }));
+
+      expect(screen.getByLabelText("Game collection")).toBeInTheDocument();
+      expect(screen.queryByRole("table")).not.toBeInTheDocument();
+    });
+
+    it("Given the table view is active, When games are shown, Then the Type column is visible", async () => {
+      useCollectionHandler(COLLECTION_XML);
+      renderBrowser();
+
+      await userEvent.type(screen.getByRole("textbox"), "testuser");
+      await userEvent.click(screen.getByRole("button", { name: "Load" }));
+
+      await waitFor(() => {
+        expect(screen.getByText("Ticket to Ride")).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole("button", { name: "Table" }));
+
+      expect(
+        screen.getByRole("columnheader", { name: "Type" }),
+      ).toBeInTheDocument();
+    });
+  });
+
   describe("reset filters", () => {
     it("Given games are loaded, When the user clicks Reset Filters, Then all games are shown again", async () => {
       useCollectionHandler(COLLECTION_XML);

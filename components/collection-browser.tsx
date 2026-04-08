@@ -16,8 +16,11 @@ import { TimeFilter } from "@/components/filters/time-filter";
 import { PlayerCountFilter } from "@/components/filters/player-count-filter";
 import { ItemTypeFilter } from "@/components/filters/item-type-filter";
 import { GameCard } from "@/components/game-card";
+import { GameTable } from "@/components/game-table";
 import { BggLogo } from "@/components/bgg-logo";
 import { Button } from "@/components/ui/button";
+
+type ViewMode = "card" | "table";
 
 const DEFAULT_FILTER_STATE: FilterState = {
   weightCategories: [],
@@ -31,6 +34,7 @@ export function CollectionBrowser() {
   const [activeUsername, setActiveUsername] = useState<string | null>(null);
   const [filterState, setFilterState] =
     useState<FilterState>(DEFAULT_FILTER_STATE);
+  const [viewMode, setViewMode] = useState<ViewMode>("card");
 
   const { savedUsername } = usePersistedUsername();
 
@@ -234,21 +238,52 @@ export function CollectionBrowser() {
                     ? `${games.length} game${games.length !== 1 ? "s" : ""}`
                     : `${filteredGames.length} of ${games.length} game${games.length !== 1 ? "s" : ""}`}
                 </p>
-                {activeFilterCount > 0 && (
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground">
-                      {activeFilterCount} active filter
-                      {activeFilterCount !== 1 ? "s" : ""}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleResetFilters}
+                <div className="flex items-center gap-3">
+                  {activeFilterCount > 0 && (
+                    <>
+                      <span className="text-sm text-muted-foreground">
+                        {activeFilterCount} active filter
+                        {activeFilterCount !== 1 ? "s" : ""}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleResetFilters}
+                      >
+                        Reset Filters
+                      </Button>
+                    </>
+                  )}
+                  {/* View toggle */}
+                  <div
+                    className="flex rounded-md border overflow-hidden"
+                    role="group"
+                    aria-label="View mode"
+                  >
+                    <button
+                      onClick={() => setViewMode("card")}
+                      aria-pressed={viewMode === "card"}
+                      className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+                        viewMode === "card"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background text-gray-800 hover:bg-muted"
+                      }`}
                     >
-                      Reset Filters
-                    </Button>
+                      Cards
+                    </button>
+                    <button
+                      onClick={() => setViewMode("table")}
+                      aria-pressed={viewMode === "table"}
+                      className={`px-3 py-1.5 text-xs font-medium transition-colors border-l ${
+                        viewMode === "table"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background text-gray-800 hover:bg-muted"
+                      }`}
+                    >
+                      Table
+                    </button>
                   </div>
-                )}
+                </div>
               </div>
 
               {/* Empty state */}
@@ -256,7 +291,7 @@ export function CollectionBrowser() {
                 <p className="text-center py-12 text-muted-foreground">
                   No games match the current filters.
                 </p>
-              ) : (
+              ) : viewMode === "card" ? (
                 <div
                   className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
                   aria-label="Game collection"
@@ -265,6 +300,8 @@ export function CollectionBrowser() {
                     <GameCard key={game.id} game={game} />
                   ))}
                 </div>
+              ) : (
+                <GameTable games={filteredGames} />
               )}
             </>
           )}
